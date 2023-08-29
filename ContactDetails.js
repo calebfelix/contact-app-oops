@@ -20,7 +20,6 @@ class ContactDetails {
     }
   }
 
-  updateContactDetils(contactDetailId, parameter, newValue) {}
 }
 
 module.exports = ContactDetails;
