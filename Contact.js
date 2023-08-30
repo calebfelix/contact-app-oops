@@ -24,6 +24,18 @@ class Contact {
       throw error;
     }
   }
+  getContactDetailsById(contactDetailId){
+    for (let index = 0; index < this.contactDetails.length; index++) {
+      if (contactDetailId == this.contactDetails[index].id) {
+        return [this.contactDetails[index], index];
+      }
+    }
+    return [null,-1];
+  }
+
+  deleteContactDetail(index){
+    return this.contactDetails.splice(index, 1)
+  }
 
   UpdateContactFirstName(newValue) {
     try {
@@ -70,15 +82,6 @@ class Contact {
       valueOfContactDetail
     );
     this.contactDetails.push(newContactDetail);
-  }
-
-  static findContactDetail(contactId) {
-    for (let index = 0; index < this.contactDetails.length; index++) {
-      if (contactId == this.contacts[index].id) {
-        return this.contacts[index];
-      }
-    }
-    return null;
   }
 
   getContactDetails(){

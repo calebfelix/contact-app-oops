@@ -20,6 +20,29 @@ class ContactDetails {
     }
   }
 
+  getTypeOfContactDetail() {
+    return this.typeOfContactDetail;
+  }
+
+  getValueOfContactDetail() {
+    return this.valueOfContactDetail;
+  }
+
+  updateContactDetailWithNewValue(type, value) {
+    try {
+      if (typeof type != "string") {
+        throw new Error("invalid type");
+      }
+      if (typeof value != "string") {
+        throw new Error("invalid new Value");
+      }
+      this.typeOfContactDetail = type;
+      this.valueOfContactDetail = value;
+    } catch (error) {
+      throw error;
+    }
+  }
+  
 }
 
 module.exports = ContactDetails;

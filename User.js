@@ -1,4 +1,5 @@
 const Contact = require("./Contact");
+const ContactDetails = require("./ContactDetails");
 
 class User {
   static id = 0;
@@ -24,10 +25,10 @@ class User {
   findContact(contactId) {
     for (let index = 0; index < this.contacts.length; index++) {
       if (contactId == this.contacts[index].id) {
-        return this.contacts[index];
+        return [this.contacts[index], index];
       }
     }
-    return null;
+    return [null, -1];
   }
 
   UpdateFirstName(newValue) {
@@ -192,7 +193,7 @@ class User {
       if (this.isAdmin) {
         throw new Error("Admin Cannot update contact");
       }
-      let contactToBeUpdated = this.findContact(id);
+      let [contactToBeUpdated, contactIndex] = this.findContact(id);
       if (contactToBeUpdated == null) {
         throw new Error("Contact Not Found");
       }
@@ -208,7 +209,7 @@ class User {
       if (this.isAdmin) {
         throw new Error("Admin cannot delete contact");
       }
-      let contactToBeDeleted = this.findContact(id);
+      let [contactToBeDeleted, contactIndex] = this.findContact(id);
       contactToBeDeleted.isActive = false;
       return contactToBeDeleted;
     } catch (error) {
@@ -225,7 +226,7 @@ class User {
       if (this.isAdmin) {
         throw new Error("Admin Cannot create contact Detail");
       }
-      let contactDetailContact = this.findContact(contactId);
+      let [contactDetailContact,contactIndex] = this.findContact(contactId);
       
     if(contactDetailContact == null){
       throw new Error("Contact Not Found")
@@ -242,7 +243,7 @@ class User {
 /// READ contact Details///
 getContactDetails(contactId){
   try {
-    let contactDetailsToFetch = this.findContact(contactId);
+    let [contactDetailsToFetch,contactIndex] = this.findContact(contactId);
     if (!this.isActive) {
       throw new Error("User Dosen't exist");
     }
@@ -262,7 +263,7 @@ getContactDetails(contactId){
 }
 
 /// UPDATE contact Details///
-updateContactDetails(contactId, contactDetailId, parameter, newValue){
+updateContactDetails(contactId, contactDetailId, type, value){
   try {
     if (!this.isActive) {
       throw new Error("User Dosen't exist");
@@ -270,25 +271,20 @@ updateContactDetails(contactId, contactDetailId, parameter, newValue){
     if (this.isAdmin) {
       throw new Error("Admin Cannot update contact details");
     }
-    let contactDetailToBeDeleted = this.findContact(contactId);
-    if (contactDetailToBeDeleted == null) {
+    let [contactDetailToBeUpdated,contactIndex] = this.findContact(contactId);
+    if (contactDetailToBeUpdated == null) {
       throw new Error("Contact Not Found");
     }
-    if (typeof parameter != "string") {
-      throw new Error("invalid Parameter");
-    }
-    if (typeof newValue != "string") {
+    if (typeof contactDetailId != "number") {
       throw new Error("invalid new Value");
     }
-    let contactDetailArray = contactDetailToBeDeleted.getContactDetails()
-    for (let index = 0; index < contactDetailArray.length; index++) {
-      if(contactDetailId == contactDetailArray[index].id){
-        contactDetailArray[index].typeOfContactDetail = parameter
-        contactDetailArray[index].valueOfContactDetail = newValue
-        return contactDetailArray
-      }  
+    let [contactDetailToBeUpdatedDetailById, index] =  contactDetailToBeUpdated.getContactDetailsById(contactDetailId);
+    if (contactDetailToBeUpdatedDetailById == null) {
+      throw new Error("Contact Detail Not Found");
     }
-    throw new Error("Contact Detail Not found")
+    contactDetailToBeUpdatedDetailById.updateContactDetailWithNewValue(type, value)
+    return contactDetailToBeUpdatedDetailById
+
   } catch (error) {
     return error.message
   }
@@ -303,7 +299,7 @@ deleteContactDetails(contactId, contactDetailId){
     if (this.isAdmin) {
       throw new Error("Admin Cannot update contact details");
     }
-    let contactDetailToBeDeleted = this.findContact(contactId);
+    let [contactDetailToBeDeleted, contactIndex] = this.findContact(contactId);
     if (contactDetailToBeDeleted == null) {
       throw new Error("Contact Not Found");
     }
@@ -313,14 +309,12 @@ deleteContactDetails(contactId, contactDetailId){
     if (typeof contactDetailId != "number") {
       throw new Error("invalid Contact Detail ID");
     }
-    let contactDetailArray = contactDetailToBeDeleted.getContactDetails()
-    for (let index = 0; index < contactDetailArray.length; index++) {
-      if(contactDetailId == contactDetailArray[index].id){
-        contactDetailArray.splice(index, 1)
-        return contactDetailArray
-      }  
+    let [contactDetailToBeDeletedDetailById, detailIndex] =  contactDetailToBeDeleted.getContactDetailsById(contactDetailId);
+    if (contactDetailToBeDeletedDetailById == null) {
+      throw new Error("Contact Detail Not Found");
     }
-    throw new Error("Contact Detail Not found")
+    let contactDetailToBeDeletedDetailByIndex = this.contacts[contactIndex].deleteContactDetail(detailIndex)
+    return contactDetailToBeDeletedDetailByIndex
   } catch (error) {
     return error.message
   }
