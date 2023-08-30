@@ -1,5 +1,4 @@
 const Contact = require("./Contact");
-const ContactDetails = require("./ContactDetails");
 
 class User {
   static id = 0;
@@ -31,7 +30,7 @@ class User {
     return [null, -1];
   }
 
-  UpdateFirstName(newValue) {
+  updateFirstName(newValue) {
     try {
       if (typeof newValue != "string") {
         throw new Error("Invalid First Name");
@@ -41,8 +40,8 @@ class User {
       throw error;
     }
   }
-  
-  UpdateLastName(newValue) {
+
+  updateLastName(newValue) {
     try {
       if (typeof newValue != "string") {
         throw new Error("Invalid Last Name");
@@ -52,6 +51,7 @@ class User {
       throw error;
     }
   }
+
   /// CREATE user///
   static newAdmin(firstName, lastName) {
     // validation check
@@ -66,7 +66,7 @@ class User {
       let newAdmin = new User(firstName, lastName, true);
       return newAdmin;
     } catch (error) {
-      return error.message
+      return error.message;
     }
   }
 
@@ -87,7 +87,7 @@ class User {
       User.allUsers.push(newUser);
       return newUser;
     } catch (error) {
-      return error.message
+      return error.message;
     }
   }
 
@@ -105,7 +105,7 @@ class User {
 
       return User.allUsers;
     } catch (error) {
-      return error.message
+      return error.message;
     }
   }
 
@@ -123,16 +123,16 @@ class User {
 
       switch (parameter) {
         case "FirstName":
-          userToBeUpdated.UpdateFirstName(newValue);
+          userToBeUpdated.updateFirstName(newValue);
           return userToBeUpdated;
         case "LastName":
-          userToBeUpdated.UpdateLastName(newValue);
+          userToBeUpdated.updateLastName(newValue);
           return userToBeUpdated;
         default:
           throw new Error("Invalid Parameter");
       }
     } catch (error) {
-      return error.message
+      return error.message;
     }
   }
 
@@ -146,7 +146,7 @@ class User {
       userToBeDeleted.isActive = false;
       return userToBeDeleted;
     } catch (error) {
-      return error.message
+      return error.message;
     }
   }
 
@@ -159,13 +159,12 @@ class User {
       if (this.isAdmin) {
         throw new Error("Admin Cannot create contact");
       }
-    
 
       let newContact = Contact.newContact(firstName, lastName);
       this.contacts.push(newContact);
       return newContact;
     } catch (error) {
-      return error.message
+      return error.message;
     }
   }
 
@@ -180,7 +179,7 @@ class User {
       }
       return this.contacts;
     } catch (error) {
-      return error.message
+      return error.message;
     }
   }
 
@@ -197,9 +196,9 @@ class User {
       if (contactToBeUpdated == null) {
         throw new Error("Contact Not Found");
       }
-      return contactToBeUpdated.updateContact(parameter, newValue)
+      return contactToBeUpdated.updateContact(parameter, newValue);
     } catch (error) {
-      return error.message
+      return error.message;
     }
   }
 
@@ -213,12 +212,12 @@ class User {
       contactToBeDeleted.isActive = false;
       return contactToBeDeleted;
     } catch (error) {
-      return error.message
+      return error.message;
     }
   }
 
   /// CREATE contact Details///
-  createContactDetail(contactId, typeOfContactDetail, valueOfContactDetail) {    
+  createContactDetail(contactId, typeOfContactDetail, valueOfContactDetail) {
     try {
       if (!this.isActive) {
         throw new Error("Contact Detail Dosen't exist");
@@ -226,99 +225,107 @@ class User {
       if (this.isAdmin) {
         throw new Error("Admin Cannot create contact Detail");
       }
-      let [contactDetailContact,contactIndex] = this.findContact(contactId);
-      
-    if(contactDetailContact == null){
-      throw new Error("Contact Not Found")
-    }
-    contactDetailContact.createContactDetail(typeOfContactDetail, valueOfContactDetail)
-      return contactDetailContact
+      let [contactDetailContact, contactIndex] = this.findContact(contactId);
 
+      if (contactDetailContact == null) {
+        throw new Error("Contact Not Found");
+      }
+      contactDetailContact.createContactDetail(
+        typeOfContactDetail,
+        valueOfContactDetail
+      );
+      return contactDetailContact;
     } catch (error) {
-      return error.message
+      return error.message;
     }
-
-}
-
-/// READ contact Details///
-getContactDetails(contactId){
-  try {
-    let [contactDetailsToFetch,contactIndex] = this.findContact(contactId);
-    if (!this.isActive) {
-      throw new Error("User Dosen't exist");
-    }
-    if (this.isAdmin) {
-      throw new Error("Admin Cannot get contact");
-    }
-    if(typeof contactId != 'number'){
-      throw new Error("Invalid Id")
-    }
-    if(contactDetailsToFetch == null){
-      throw new Error("Contact Not Found!");
-    }
-    return contactDetailsToFetch.getContactDetails()
-  } catch (error) {
-    return error.message
   }
-}
 
-/// UPDATE contact Details///
-updateContactDetails(contactId, contactDetailId, type, value){
-  try {
-    if (!this.isActive) {
-      throw new Error("User Dosen't exist");
+  /// READ contact Details///
+  getContactDetails(contactId) {
+    try {
+      let [contactDetailsToFetch, contactIndex] = this.findContact(contactId);
+      if (!this.isActive) {
+        throw new Error("User Dosen't exist");
+      }
+      if (this.isAdmin) {
+        throw new Error("Admin Cannot get contact");
+      }
+      if (typeof contactId != "number") {
+        throw new Error("Invalid Id");
+      }
+      if (contactDetailsToFetch == null) {
+        throw new Error("Contact Not Found!");
+      }
+      return contactDetailsToFetch.getContactDetails();
+    } catch (error) {
+      return error.message;
     }
-    if (this.isAdmin) {
-      throw new Error("Admin Cannot update contact details");
-    }
-    let [contactDetailToBeUpdated,contactIndex] = this.findContact(contactId);
-    if (contactDetailToBeUpdated == null) {
-      throw new Error("Contact Not Found");
-    }
-    if (typeof contactDetailId != "number") {
-      throw new Error("invalid new Value");
-    }
-    let [contactDetailToBeUpdatedDetailById, index] =  contactDetailToBeUpdated.getContactDetailsById(contactDetailId);
-    if (contactDetailToBeUpdatedDetailById == null) {
-      throw new Error("Contact Detail Not Found");
-    }
-    contactDetailToBeUpdatedDetailById.updateContactDetailWithNewValue(type, value)
-    return contactDetailToBeUpdatedDetailById
-
-  } catch (error) {
-    return error.message
   }
-}
 
-/// DELETE contact Details///
-deleteContactDetails(contactId, contactDetailId){
-  try {
-    if (!this.isActive) {
-      throw new Error("User Dosen't exist");
+  /// UPDATE contact Details///
+  updateContactDetails(contactId, contactDetailId, type, value) {
+    try {
+      if (!this.isActive) {
+        throw new Error("User Dosen't exist");
+      }
+      if (this.isAdmin) {
+        throw new Error("Admin Cannot update contact details");
+      }
+      let [contactDetailToBeUpdated, contactIndex] =
+        this.findContact(contactId);
+      if (contactDetailToBeUpdated == null) {
+        throw new Error("Contact Not Found");
+      }
+      if (typeof contactDetailId != "number") {
+        throw new Error("invalid new Value");
+      }
+      let [contactDetailToBeUpdatedDetailById, index] =
+        contactDetailToBeUpdated.getContactDetailsById(contactDetailId);
+      if (contactDetailToBeUpdatedDetailById == null) {
+        throw new Error("Contact Detail Not Found");
+      }
+      contactDetailToBeUpdatedDetailById.updateContactDetailWithNewValue(
+        type,
+        value
+      );
+      return contactDetailToBeUpdatedDetailById;
+    } catch (error) {
+      return error.message;
     }
-    if (this.isAdmin) {
-      throw new Error("Admin Cannot update contact details");
-    }
-    let [contactDetailToBeDeleted, contactIndex] = this.findContact(contactId);
-    if (contactDetailToBeDeleted == null) {
-      throw new Error("Contact Not Found");
-    }
-    if (typeof contactId != "number") {
-      throw new Error("invalid Contact ID");
-    }
-    if (typeof contactDetailId != "number") {
-      throw new Error("invalid Contact Detail ID");
-    }
-    let [contactDetailToBeDeletedDetailById, detailIndex] =  contactDetailToBeDeleted.getContactDetailsById(contactDetailId);
-    if (contactDetailToBeDeletedDetailById == null) {
-      throw new Error("Contact Detail Not Found");
-    }
-    let contactDetailToBeDeletedDetailByIndex = this.contacts[contactIndex].deleteContactDetail(detailIndex)
-    return contactDetailToBeDeletedDetailByIndex
-  } catch (error) {
-    return error.message
   }
-}
+
+  /// DELETE contact Details///
+  deleteContactDetails(contactId, contactDetailId) {
+    try {
+      if (!this.isActive) {
+        throw new Error("User Dosen't exist");
+      }
+      if (this.isAdmin) {
+        throw new Error("Admin Cannot update contact details");
+      }
+      let [contactDetailToBeDeleted, contactIndex] =
+        this.findContact(contactId);
+      if (contactDetailToBeDeleted == null) {
+        throw new Error("Contact Not Found");
+      }
+      if (typeof contactId != "number") {
+        throw new Error("invalid Contact ID");
+      }
+      if (typeof contactDetailId != "number") {
+        throw new Error("invalid Contact Detail ID");
+      }
+      let [contactDetailToBeDeletedDetailById, detailIndex] =
+        contactDetailToBeDeleted.getContactDetailsById(contactDetailId);
+      if (contactDetailToBeDeletedDetailById == null) {
+        throw new Error("Contact Detail Not Found");
+      }
+      let contactDetailToBeDeletedDetailByIndex =
+        this.contacts[contactIndex].deleteContactDetail(detailIndex);
+      return contactDetailToBeDeletedDetailByIndex;
+    } catch (error) {
+      return error.message;
+    }
+  }
 }
 
 module.exports = User;
