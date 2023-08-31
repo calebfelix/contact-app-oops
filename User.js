@@ -1,10 +1,10 @@
 const Contact = require("./Contact");
 
 class User {
-  static id = 0;
-  static allUsers = [];
+  static #id = 0;
+  static #allUsers = [];
   constructor(firstName, lastName, isAdmin) {
-    this.id = User.id++;
+    this.id = User.#id++;
     this.firstName = firstName;
     this.lastName = lastName;
     this.isActive = true;
@@ -13,9 +13,9 @@ class User {
   }
 
   static #findUser(userId) {
-    for (let index = 0; index < User.allUsers.length; index++) {
-      if (userId === User.allUsers[index].id) {
-        return User.allUsers[index];
+    for (let index = 0; index < User.#allUsers.length; index++) {
+      if (userId === User.#allUsers[index].id) {
+        return User.#allUsers[index];
       }
     }
     return null;
@@ -66,7 +66,7 @@ class User {
       let newAdmin = new User(firstName, lastName, true);
       return newAdmin;
     } catch (error) {
-      return error.message;
+      return error// TODO;
     }
   }
 
@@ -84,10 +84,10 @@ class User {
       }
 
       let newUser = new User(firstName, lastName, false);
-      User.allUsers.push(newUser);
+      User.#allUsers.push(newUser);
       return newUser;
     } catch (error) {
-      return error.message;
+      return error// TODO;
     }
   }
 
@@ -99,13 +99,13 @@ class User {
         throw new Error("Only admin can get contact");
       }
 
-      if (User.allUsers.length === 0) {
+      if (User.#allUsers.length === 0) {
         throw new Error("Contact list is empty");
       }
 
-      return User.allUsers;
+      return User.#allUsers;
     } catch (error) {
-      return error.message;
+      return error// TODO;
     }
   }
 
@@ -132,7 +132,7 @@ class User {
           throw new Error("Invalid Parameter");
       }
     } catch (error) {
-      return error.message;
+      return error// TODO;
     }
   }
 
@@ -146,7 +146,7 @@ class User {
       userToBeDeleted.isActive = false;
       return userToBeDeleted;
     } catch (error) {
-      return error.message;
+      return error// TODO;
     }
   }
 
@@ -164,7 +164,7 @@ class User {
       this.contacts.push(newContact);
       return newContact;
     } catch (error) {
-      return error.message;
+      return error// TODO;
     }
   }
 
@@ -179,7 +179,7 @@ class User {
       }
       return this.contacts;
     } catch (error) {
-      return error.message;
+      return error// TODO;
     }
   }
 
@@ -212,7 +212,7 @@ class User {
       contactToBeDeleted.isActive = false;
       return contactToBeDeleted;
     } catch (error) {
-      return error.message;
+      return error// TODO;
     }
   }
 
@@ -236,7 +236,7 @@ class User {
       );
       return contactDetailContact;
     } catch (error) {
-      return error.message;
+      return error// TODO;
     }
   }
 
@@ -258,7 +258,7 @@ class User {
       }
       return contactDetailsToFetch.getContactDetails();
     } catch (error) {
-      return error.message;
+      return error// TODO;
     }
   }
 
@@ -290,7 +290,7 @@ class User {
       );
       return contactDetailToBeUpdatedDetailById;
     } catch (error) {
-      return error.message;
+      return error// TODO;
     }
   }
 
@@ -323,7 +323,7 @@ class User {
         this.contacts[contactIndex].deleteContactDetail(detailIndex);
       return this.contacts;
     } catch (error) {
-      return error.message;
+      return error// TODO;
     }
   }
 }
