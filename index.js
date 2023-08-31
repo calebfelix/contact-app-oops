@@ -18,7 +18,6 @@ console.log(user1.getAllContacts())
 console.log(admin.deleteUser(2))
 user1.createContactDetail(0,"email","del@mail.com")
 user1.createContactDetail(0,"number","839293993")
-
 console.log(user1.createContactDetail(1,"home","839293993"))
 console.log(user1.getContactDetails(1))
 console.log(user1.updateContactDetails(0, 1, "work-Email", "work@mail.com"))
