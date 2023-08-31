@@ -1,4 +1,5 @@
 const ContactDetails = require("./ContactDetails");
+const { ValidationError } = require("./error");
 
 class Contact {
   static id = 0;
@@ -14,10 +15,10 @@ class Contact {
     // validation
     try {
       if (typeof firstName != "string") {
-        throw new Error("invalid First Name");
+        throw new ValidationError("invalid First Name");
       }
       if (typeof firstName != "string") {
-        throw new Error("invalid Last Name");
+        throw new ValidationError("invalid Last Name");
       }
       return new Contact(firstName, lastName);
     } catch (error) {
@@ -40,7 +41,7 @@ class Contact {
   UpdateContactFirstName(newValue) {
     try {
       if (typeof newValue != "string") {
-        throw new Error("Invalid First Name");
+        throw new ValidationError("Invalid First Name");
       }
       this.firstName = newValue;
     } catch (error) {
@@ -51,7 +52,7 @@ class Contact {
   UpdateContactLastName(newValue) {
     try {
       if (typeof newValue != "string") {
-        throw new Error("Invalid Last Name");
+        throw new ValidationError("Invalid Last Name");
       }
       this.lastName = newValue;
     } catch (error) {
@@ -69,7 +70,7 @@ class Contact {
           this.UpdateContactLastName(newValue);
           return this;
         default:
-          throw new Error("Invalid Parameter");
+          throw new ValidationError("Invalid Parameter");
       }
     } catch (error) {
       throw error;

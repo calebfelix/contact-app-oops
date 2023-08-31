@@ -1,3 +1,5 @@
+const { ValidationError } = require("./error");
+
 class ContactDetails {
   static id = 0;
   constructor(typeOfContactDetail, valueOfContactDetail) {
@@ -9,10 +11,10 @@ class ContactDetails {
   static newContactDetail(typeOfContactDetail, valueOfContactDetail) {
     try {
       if (typeof typeOfContactDetail != "string") {
-        throw new Error("invalid Contact Detail type");
+        throw new ValidationError("invalid Contact Detail type");
       }
       if (typeof valueOfContactDetail != "string") {
-        throw new Error("invalid Contact Detail value");
+        throw new ValidationError("invalid Contact Detail value");
       }
       return new ContactDetails(typeOfContactDetail, valueOfContactDetail);
     } catch (error) {
@@ -31,10 +33,10 @@ class ContactDetails {
   updateContactDetailWithNewValue(type, value) {
     try {
       if (typeof type != "string") {
-        throw new Error("invalid type");
+        throw new ValidationError("invalid type");
       }
       if (typeof value != "string") {
-        throw new Error("invalid new Value");
+        throw new ValidationError("invalid new Value");
       }
       this.typeOfContactDetail = type;
       this.valueOfContactDetail = value;
