@@ -4,8 +4,8 @@ let { StatusCodes } = require("http-status-codes");
 class UnauthorizedError extends ContactAppError {
   constructor(specificMessage) {
     super(
-      "Invalid Parameters",
-      "Validation Error",
+      "Unauthorized",
+      "Unauthorized Error",
       StatusCodes.UNAUTHORIZED,
       specificMessage
     );
